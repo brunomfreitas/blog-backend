@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  blog-postgres:
+    image: postgres:alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres      # <<< precisa disso
+    volumes:
+      - blog_pg_data:/var/lib/postgresql/data  # <<< path correto
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d blog"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      blog-postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: blog-postgres
+      DATABASE_NAME: blog
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_PORT: 5432
+      JWT_SECRET: e14ec713-b091-47d2-a649-f9b085ab9c6f
+      JWT_EXPIRES_IN: 1d
+      NODE_ENV: production
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  blog_pg_data:
