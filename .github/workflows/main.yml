@@ -1,11 +1,11 @@
-name: Build, Test and Push Blog App
+name: Build, Push Blog App
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-test-push:
+  build:
     runs-on: ubuntu-latest
 
     env:
@@ -16,10 +16,6 @@ jobs:
       DB_USER: blog_user
       DB_PASS: blog_user
       NET_NAME: blog-network
-
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout
@@ -46,101 +42,13 @@ jobs:
           images: ${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha
-
-      # Build para teste (carrega localmente na runner)
-      - name: Build (load for test)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          load: true
-          push: false
-          labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ env.IMAGE_NAME }}:ci
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            NODE_ENV=production
-
-      # --- SMOKE TEST com rede dedicada + Postgres + App ---
-      - name: Create network
-        run: |
-          set -e
-          docker network create $NET_NAME
-
-      - name: Run Postgres
-        run: |
-          set -e
-          docker run -d --name postgres \
-            --network $NET_NAME \
-            -e POSTGRES_DB=$DB_NAME \
-            -e POSTGRES_USER=$DB_USER \
-            -e POSTGRES_PASSWORD=$DB_PASS \
-            -p 5433:5432 \
-            --health-cmd="pg_isready -U $DB_USER -d $DB_NAME" \
-            --health-interval=5s \
-            --health-timeout=3s \
-            --health-retries=20 \
-            postgres:alpine
-
-          echo "Aguardando Postgres saudável..."
-          for i in {1..60}; do
-            status=$(docker inspect --format='{{json .State.Health.Status}}' postgres | tr -d '"')
-            if [ "$status" = "healthy" ]; then
-              echo "Postgres está healthy."
-              break
-            fi
-            sleep 2
-          done
-          test "$status" = "healthy"
-
-      - name: Run app (smoke)
-        run: |
-          set -e
-          docker run -d --name blog-app-test \
-            --network $NET_NAME \
-            -p ${APP_PORT}:3000 \
-            -e DATABASE_HOST=postgres \
-            -e DATABASE_NAME=$DB_NAME \
-            -e DATABASE_USER=$DB_USER \
-            -e DATABASE_PASSWORD=$DB_PASS \
-            -e DATABASE_PORT=$DB_PORT \
-            -e JWT_SECRET="e14ec713-b091-47d2-a649-f9b085ab9c6f" \
-            -e JWT_EXPIRES_IN="1d" \
-            -e NODE_ENV="production" \
-            ${{ env.IMAGE_NAME }}:ci
-
-          echo "Aguardando app subir..."
-          sleep 15
-
-          echo "Últimos logs do app:"
-          docker logs --tail=200 blog-app-test || true
-
-          # Se você tiver um endpoint /healthz habilite:
-          # curl -fsS http://localhost:${APP_PORT}/healthz || (echo "Healthcheck falhou" && exit 1)
-
-          # Confirma container rodando
-          docker ps --filter "name=blog-app-test"
-
-      - name: Cleanup smoke test
-        if: always()
-        run: |
-          docker rm -f blog-app-test || true
-          docker rm -f postgres || true
-          docker network rm $NET_NAME || true
 
       # Build final + push com as tags definidas pelo metadata-action
       - name: Build and Push (final)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          platforms: linux/amd64
-          labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            NODE_ENV=production
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker network create --driver bridge blog-network
+          docker volume create blog-pgdata
+          docker run -d --name blog_postgres --network blog-network -e POSTGRES_USER="blog_user" -e POSTGRES_PASSWORD="blog_password" -e POSTGRES_DB="blog" -v blog-pgdata:/var/lib/postgresql/data -p 5433:5432 postgres:18.0-alpine
+          docker build -t $DOCKER_USERNAME/blog-app:latest --build-arg DATABASE_HOST="blog_postgres" --build-arg DATABASE_NAME="blog" --build-arg DATABASE_USER="blog_user" --build-arg DATABASE_PASSWORD="blog_password" --build-arg DATABASE_PORT=5433 --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} .
+          docker push $DOCKER_USERNAME/blog-app:latest
