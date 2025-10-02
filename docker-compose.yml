@@ -7,14 +7,14 @@ services:
       - "5433:5432"
     environment:
       POSTGRES_DB: blog
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres      # <<< precisa disso
+      POSTGRES_USER: blog_user
+      POSTGRES_PASSWORD: blog_user      # <<< precisa disso
     volumes:
       - blog_pg_data:/var/lib/postgresql/data  # <<< path correto
     networks:
       - blog-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d blog"]
+      test: ["CMD-SHELL", "pg_isready -U blog_user -d blog"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -30,8 +30,8 @@ services:
     environment:
       DATABASE_HOST: blog-postgres
       DATABASE_NAME: blog
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
+      DATABASE_USER: blog_user
+      DATABASE_PASSWORD: blog_user
       DATABASE_PORT: 5432
       JWT_SECRET: e14ec713-b091-47d2-a649-f9b085ab9c6f
       JWT_EXPIRES_IN: 1d

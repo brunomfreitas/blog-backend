@@ -8,25 +8,14 @@ jobs:
   build-test-push:
     runs-on: ubuntu-latest
 
-    # Service que substitui o blog-postgres do docker-compose
-    services:
-      postgres:
-        image: postgres:alpine
-        env:
-          POSTGRES_DB: blog
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        # healthcheck semelhante ao compose (para depends_on:service_healthy)
-        options: >-
-          --health-cmd="pg_isready -U postgres -d blog"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=10
-
     env:
-      IMAGE_NAME: brunomfreitas/blog-app
+      IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/blog-app
+      APP_PORT: 3000
+      DB_PORT: 5432
+      DB_NAME: blog
+      DB_USER: blog_user
+      DB_PASS: blog_user
+      NET_NAME: blog-network
 
     permissions:
       contents: read
@@ -36,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU (multi-arch opcional)
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
@@ -45,6 +34,7 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
+          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -58,13 +48,13 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
 
-      # 1) Build (sem push) e carrega para o Docker local da runner (para testar)
+      # Build para teste (carrega localmente na runner)
       - name: Build (load for test)
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile         # ajuste se estiver em outro caminho
-          load: true                  # carrega para 'docker images' local
+          file: ./Dockerfile
+          load: true
           push: false
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ env.IMAGE_NAME }}:ci
@@ -72,42 +62,75 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NODE_ENV=production
-            # Evite passar secrets aqui. Use env no runtime (abaixo).
 
-      # 2) Smoke test: roda o container apontando para o service 'postgres'
-      - name: Run container (smoke test)
+      # --- SMOKE TEST com rede dedicada + Postgres + App ---
+      - name: Create network
+        run: |
+          set -e
+          docker network create $NET_NAME
+
+      - name: Run Postgres
+        run: |
+          set -e
+          docker run -d --name postgres \
+            --network $NET_NAME \
+            -e POSTGRES_DB=$DB_NAME \
+            -e POSTGRES_USER=$DB_USER \
+            -e POSTGRES_PASSWORD=$DB_PASS \
+            -p 5433:5432 \
+            --health-cmd="pg_isready -U $DB_USER -d $DB_NAME" \
+            --health-interval=5s \
+            --health-timeout=3s \
+            --health-retries=20 \
+            postgres:alpine
+
+          echo "Aguardando Postgres saudável..."
+          for i in {1..60}; do
+            status=$(docker inspect --format='{{json .State.Health.Status}}' postgres | tr -d '"')
+            if [ "$status" = "healthy" ]; then
+              echo "Postgres está healthy."
+              break
+            fi
+            sleep 2
+          done
+          test "$status" = "healthy"
+
+      - name: Run app (smoke)
         run: |
           set -e
           docker run -d --name blog-app-test \
-            -p 3000:3000 \
+            --network $NET_NAME \
+            -p ${APP_PORT}:3000 \
             -e DATABASE_HOST=postgres \
-            -e DATABASE_NAME=blog \
-            -e DATABASE_USER=postgres \
-            -e DATABASE_PASSWORD=postgres \
-            -e DATABASE_PORT=5432 \
-            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            -e DATABASE_NAME=$DB_NAME \
+            -e DATABASE_USER=$DB_USER \
+            -e DATABASE_PASSWORD=$DB_PASS \
+            -e DATABASE_PORT=$DB_PORT \
+            -e JWT_SECRET="e14ec713-b091-47d2-a649-f9b085ab9c6f" \
             -e JWT_EXPIRES_IN="1d" \
             -e NODE_ENV="production" \
             ${{ env.IMAGE_NAME }}:ci
 
-          echo "Aguardando o app subir..."
+          echo "Aguardando app subir..."
           sleep 15
 
-          echo "Mostrando últimos logs:"
+          echo "Últimos logs do app:"
           docker logs --tail=200 blog-app-test || true
 
-          # Se tiver um endpoint de health, habilite o curl abaixo:
-          # curl -fsS http://localhost:3000/health || (echo "Healthcheck falhou" && exit 1)
+          # Se você tiver um endpoint /healthz habilite:
+          # curl -fsS http://localhost:${APP_PORT}/healthz || (echo "Healthcheck falhou" && exit 1)
 
-          # Para manter o job simples, só garantimos que o container está rodando:
+          # Confirma container rodando
           docker ps --filter "name=blog-app-test"
 
-      - name: Stop test container
+      - name: Cleanup smoke test
         if: always()
         run: |
           docker rm -f blog-app-test || true
+          docker rm -f postgres || true
+          docker network rm $NET_NAME || true
 
-      # 3) Build final + Push (reutiliza cache)
+      # Build final + push com as tags definidas pelo metadata-action
       - name: Build and Push (final)
         uses: docker/build-push-action@v6
         with:
