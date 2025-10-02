@@ -11,7 +11,7 @@ jobs:
     # Service que substitui o blog-postgres do docker-compose
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgres:alpine
         env:
           POSTGRES_DB: blog
           POSTGRES_USER: postgres
