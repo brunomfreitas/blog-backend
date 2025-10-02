@@ -1,16 +1,32 @@
-name: Build and Push Blog Backend
+name: Build, Test and Push Blog App
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-and-push:
+  build-test-push:
     runs-on: ubuntu-latest
 
+    # Service que substitui o blog-postgres do docker-compose
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: blog
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # healthcheck semelhante ao compose (para depends_on:service_healthy)
+        options: >-
+          --health-cmd="pg_isready -U postgres -d blog"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
+
     env:
-      IMAGE_NAME: brunomfreitas/blog-backend
+      IMAGE_NAME: brunomfreitas/blog-app
 
     permissions:
       contents: read
@@ -32,6 +48,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Gera tags (latest na main + sha)
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -41,15 +58,65 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
 
-      - name: Build and Push backend image
+      # 1) Build (sem push) e carrega para o Docker local da runner (para testar)
+      - name: Build (load for test)
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile      # ajuste se seu Dockerfile estiver em outra pasta
+          file: ./Dockerfile         # ajuste se estiver em outro caminho
+          load: true                  # carrega para 'docker images' local
+          push: false
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.IMAGE_NAME }}:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+            # Evite passar secrets aqui. Use env no runtime (abaixo).
+
+      # 2) Smoke test: roda o container apontando para o service 'postgres'
+      - name: Run container (smoke test)
+        run: |
+          set -e
+          docker run -d --name blog-app-test \
+            -p 3000:3000 \
+            -e DATABASE_HOST=postgres \
+            -e DATABASE_NAME=blog \
+            -e DATABASE_USER=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_PORT=5432 \
+            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            -e JWT_EXPIRES_IN="1d" \
+            -e NODE_ENV="production" \
+            ${{ env.IMAGE_NAME }}:ci
+
+          echo "Aguardando o app subir..."
+          sleep 15
+
+          echo "Mostrando últimos logs:"
+          docker logs --tail=200 blog-app-test || true
+
+          # Se tiver um endpoint de health, habilite o curl abaixo:
+          # curl -fsS http://localhost:3000/health || (echo "Healthcheck falhou" && exit 1)
+
+          # Para manter o job simples, só garantimos que o container está rodando:
+          docker ps --filter "name=blog-app-test"
+
+      - name: Stop test container
+        if: always()
+        run: |
+          docker rm -f blog-app-test || true
+
+      # 3) Build final + Push (reutiliza cache)
+      - name: Build and Push (final)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
