@@ -50,5 +50,5 @@ jobs:
           docker network create --driver bridge blog-network
           docker volume create blog-pgdata
           docker run -d --name blog_postgres --network blog-network -e POSTGRES_USER="blog_user" -e POSTGRES_PASSWORD="blog_password" -e POSTGRES_DB="blog" -v blog-pgdata:/var/lib/postgresql/data -p 5433:5432 postgres:18.0-alpine
-          docker build -t $DOCKER_USERNAME/blog-app:latest --build-arg DATABASE_HOST="blog_postgres" --build-arg DATABASE_NAME="blog" --build-arg DATABASE_USER="blog_user" --build-arg DATABASE_PASSWORD="blog_password" --build-arg DATABASE_PORT=5433 --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} .
-          docker push $DOCKER_USERNAME/blog-app:latest
+          docker build -t $DOCKER_USERNAME/blog-app --build-arg DATABASE_HOST="blog_postgres" --build-arg DATABASE_NAME="blog" --build-arg DATABASE_USER="blog_user" --build-arg DATABASE_PASSWORD="blog_password" --build-arg DATABASE_PORT=5433 --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} .
+          docker push $DOCKER_USERNAME/blog-app
