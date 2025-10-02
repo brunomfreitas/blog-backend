@@ -11,6 +11,8 @@ domain
 http
    | --> controllers
    | --> middlewares
+   | --> docs
+   | --> helper
 
 lib
    | --> typeorm
@@ -21,10 +23,12 @@ repositories
 use-case
 
 # Bibliotecas:
+	Node.js (Typescript)
 	TypeOrm
 	Express
 	zod
 	postgres
+	swagger
 
 
 # P1 - Para criar um projeto do Zero
