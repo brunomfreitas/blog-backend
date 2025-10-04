@@ -6,8 +6,6 @@ import { z } from 'zod';
 
 export async function create(req: Request, res: Response) {
 
-	
-
 	const registerBodySchema = z.object({    
 		name: z.string(),
 		cpf: z.string(),

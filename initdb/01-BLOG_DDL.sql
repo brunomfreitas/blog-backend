@@ -1,6 +1,6 @@
 CREATE SCHEMA blog;
 
-CREATE USER blog_user WITH PASSWORD 'blog_user';
+CREATE USER blog_user WITH PASSWORD 'blog_password';
 
 GRANT USAGE ON SCHEMA blog TO blog_user;
 
@@ -55,3 +55,8 @@ CREATE TABLE BLOG.POST (
   CATEGORY INT NOT null REFERENCES blog.category(id),
   POST_STATUS INT NOT null REFERENCES blog.post_status(id)
 );
+
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA blog TO blog_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA blog GRANT USAGE, SELECT ON SEQUENCES TO blog_user;
+

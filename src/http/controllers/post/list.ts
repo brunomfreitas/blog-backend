@@ -1,6 +1,6 @@
 import { PostRepository } from '@/repositories/typeorm/post.repository'
 import { makeUseCase } from '@/use-case/factory/make-use-case'
-import { FindAllUseCase } from '@/use-case/post/find-all'
+import { ListUseCase } from '@/use-case/post/list'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
@@ -13,9 +13,9 @@ export async function list(req: Request, res: Response) {
 
   	const { page, limit } = registerQuerySchema.parse(req.query)
 
-  	const findAllUseCase = makeUseCase(FindAllUseCase, PostRepository)
+  	const listUseCase = makeUseCase(ListUseCase, PostRepository)
 
-  	const data = await findAllUseCase.handler(page, limit)
+  	const data = await listUseCase.handler(page, limit)
 
   	return res.status(200).json(data)
 }

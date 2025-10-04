@@ -4,7 +4,7 @@ export type CreatePostDTO = {
   subtitle: string
   message: string
   image: string
-  createdAt: Date
+//   createdAt: Date
   createdBy: number
   category: number
   status: number

@@ -8,7 +8,6 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId,
 } from 'typeorm'
-// import { PostCategory } from '../enums/post-category.enum'
 import { Category } from './category.entity'
 import { Person } from './person.entity'
 import { PostStatus } from './post-status.entity'
@@ -36,12 +35,6 @@ export class Post {
   @Column({ name: 'postedat', type: 'timestamp', nullable: true })
   postedAt!: Date | null
 
-//   @Column({ name: 'status', type: 'boolean', default: true })
-//   status!: boolean
-
-//   @Column({ name: 'category', type: 'int' })
-//   category!: PostCategory
-
   // ===== Relacionamentos =====
 
   // quem criou o post
@@ -53,8 +46,6 @@ export class Post {
   @RelationId((post: Post) => post.createdByPerson)
   createdBy!: number
 
-
-
   // quem publicou/aprovou o post
   @ManyToOne(() => Person, { nullable: true, eager: false })
   @JoinColumn({ name: 'postedby', referencedColumnName: 'id' })
@@ -64,8 +55,7 @@ export class Post {
   @RelationId((post: Post) => post.postedByPerson)
   postedBy!: number | null
 
-
-    // quem publicou/aprovou o post
+  // quem publicou/aprovou o post
   @ManyToOne(() => Category, { nullable: true, eager: false })
   @JoinColumn({ name: 'category', referencedColumnName: 'id' })
   postCategory: Category
@@ -74,16 +64,15 @@ export class Post {
   @RelationId((post: Post) => post.postCategory)
   category!: number
 
+  // quem publicou/aprovou o post
+  @ManyToOne(() => PostStatus, { nullable: true, eager: false })
+  @JoinColumn({ name: 'post_status', referencedColumnName: 'id' })
+  postStatus: PostStatus
 
+  // expõe o ID sem precisar de join
+  @RelationId((post: Post) => post.postStatus)
+  status!: number
 
-	// quem publicou/aprovou o post
-  	@ManyToOne(() => PostStatus, { nullable: true, eager: false })
-  	@JoinColumn({ name: 'status', referencedColumnName: 'id' })
-  	postStatus: PostStatus
-
-  	// expõe o ID sem precisar de join
-  	@RelationId((post: Post) => post.postStatus)
-  	status!: number
 }
 
 @Index('idx_post_createdby', ['createdBy'])

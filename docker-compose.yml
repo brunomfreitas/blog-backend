@@ -7,10 +7,11 @@ services:
       - "5433:5432"
     environment:
       POSTGRES_DB: blog
-      POSTGRES_USER: blog_user
-      POSTGRES_PASSWORD: blog_user      # <<< precisa disso
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
     volumes:
-      - blog_pg_data:/var/lib/postgresql/data  # <<< path correto
+      - blog_pg_data:/var/lib/postgresql/data	  
+      - ./initdb:/docker-entrypoint-initdb.d:ro
     networks:
       - blog-network
     healthcheck:
@@ -31,7 +32,7 @@ services:
       DATABASE_HOST: blog-postgres
       DATABASE_NAME: blog
       DATABASE_USER: blog_user
-      DATABASE_PASSWORD: blog_user
+      DATABASE_PASSWORD: blog_password
       DATABASE_PORT: 5432
       JWT_SECRET: e14ec713-b091-47d2-a649-f9b085ab9c6f
       JWT_EXPIRES_IN: 1d

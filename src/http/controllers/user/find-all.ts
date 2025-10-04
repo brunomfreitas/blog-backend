@@ -4,8 +4,9 @@ import { FindAllUseCase } from '@/use-case/user/find-all'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
+
 export async function findAll(req: Request, res: Response) {
-  
+
 	const registerQuerySchema = z.object({
     	page: z.coerce.number().default(1),
     	limit: z.coerce.number().default(10),

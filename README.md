@@ -31,6 +31,9 @@ use-case
 	swagger
 
 
+	jsonwebtoken
+	bcryptjs
+
 # P1 - Para criar um projeto do Zero
 npm init -y
 
@@ -89,6 +92,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA blog TO blog_user;
 
 
 
-docker run -d --name blog-app-test -p 3000:3000 -e DATABASE_HOST=postgres -e DATABASE_NAME=blog -e DATABASE_USER=postgres -e DATABASE_PASSWORD=postgres -e DATABASE_PORT=5432 -e JWT_SECRET="e14ec713-b091-47d2-a649-f9b085ab9c6f" -e JWT_EXPIRES_IN="1d" -e NODE_ENV="production" brunomfreitas/blog-app
 
-docker run -it brunomfreitas/blog-app:latest sh
+# DOCKER
+>> Dockerfile
+	docker build -t blog-backend:prod .
+
+
+>> Docker Compose
+	docker-compose up

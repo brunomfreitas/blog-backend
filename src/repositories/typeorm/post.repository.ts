@@ -5,7 +5,7 @@ import { PostStatus } from '@/domain/entities/post-status.entity'
 import { Post } from '@/domain/entities/post.entity'
 import { appDataSource } from '@/lib/typeorm/typeorm'
 import { CreatePostDTO, UpdatePostDTO } from '@/use-case/post/post-dtos'
-import { ILike, Repository } from 'typeorm'
+import { ILike, MoreThan, Repository } from 'typeorm'
 
 export class PostRepository {
   private repository: Repository<Post>
@@ -22,11 +22,27 @@ export class PostRepository {
   	this.postCategoryRepo = appDataSource.getRepository(Category)
   }
 
-  async findAll(page: number, limit: number): Promise<Post[]> {
+  async list(page: number, limit: number): Promise<Post[]> {
+	const now = new Date();
+
     return this.repository.find({
-      skip: (page - 1) * limit,
-      take: limit,
-      relations: ['createdByPerson', 'postedByPerson', 'postStatus', 'postCategory'],
+		where: {			
+			postStatus: { name: "Publicado" },
+			postedAt: MoreThan(now),
+		},
+	    order: { postedAt: 'DESC', id: 'DESC' },
+      	relations: ['createdByPerson', 'postedByPerson', 'postStatus', 'postCategory'],
+		skip: (page - 1) * limit,
+      	take: limit,
+    })
+  }
+
+  async listAll(page: number, limit: number): Promise<Post[]> {
+    return this.repository.find({
+		order: { id: 'DESC' },
+      	relations: ['createdByPerson', 'postedByPerson', 'postStatus', 'postCategory'],
+	  	skip: (page - 1) * limit,
+    	take: limit,
     })
   }
 
@@ -41,18 +57,39 @@ export class PostRepository {
     
 	const creator = await this.createdByRepo.findOne({ where: { id: data.createdBy } })
 	const postStatus = await this.postStatusRepo.findOne({ where: { id: data.status } })
-	const PostCategory = await this.postCategoryRepo.findOne({ where: { id: data.category } })
+	const postCategory = await this.postCategoryRepo.findOne({ where: { id: data.category } })
     
 	if (!creator) throw new Error('Person not found')
+		
+	if (!postStatus) throw new Error('Status not found')
 
-    const { title, subtitle, message, image, createdAt } = data
+	if (!postCategory) throw new Error('Category not found')
+    
+	const post = {		
+		title: data.title,
+		subtitle: data.subtitle,
+		message: data.message,
+		image: data.image,
+		createdBy: data.createdBy,
+		createdByPerson: creator,
+		postCategory: postCategory,
+		category: data.category,
+		postStatus: postStatus,		
+		status: data.status,
+	}
 
-    const entity = this.repository.create(data)
+    const entity = this.repository.create(post)
 
     return this.repository.save(entity)
   }
 
 	async update(data: UpdatePostDTO): Promise<Post> {
+
+		console.log('rep data', data);
+
+		const postedByPerson = await this.createdByRepo.findOne({ where: { id: data.postedBy } })
+		const postStatus = await this.postStatusRepo.findOne({ where: { id: data.status } })
+		const postCategory = await this.postCategoryRepo.findOne({ where: { id: data.category } })
 
 		const partial: Partial<Post> = {
 			id: data.id,
@@ -60,11 +97,14 @@ export class PostRepository {
 			subtitle: data.subtitle,
 			message: data.message,
 			image: data.image,
-			category: data.category as any, // se for enum numérico
+			postedBy: data.postedBy,
+			postedByPerson: postedByPerson,
+			category: data.category,
+			postCategory: postCategory,
 			postedAt: data.postedAt,
 			status: data.status,
+			postStatus: postStatus
 		}
-
 		
 		if (data.postedBy === null) {  
 			partial.postedByPerson = null
@@ -87,20 +127,28 @@ export class PostRepository {
 	}
 
 	async search(q: string, page: number, limit: number) {
+		const now = new Date();
+
 		const where = [
 			{ title: ILike(`%${q}%`) },
 			{ message: ILike(`%${q}%`) },
+			{ subtitle: ILike(`%${q}%`) }, // se quiser incluir também o subtitle
 		];
 
 		const [rows, total] = await this.repository.findAndCount({
-		where,
-		relations: ["createdByPerson", "postedByPerson", "postStatus", "postCategory"],
-		order: { createdAt: "DESC" },
-		skip: (page - 1) * limit,
-		take: limit,
+			where: where.map((condition) => ({
+			...condition,
+			postStatus: { name: "Publicado" }, // filtra pelo nome
+			postedAt: MoreThan(now),           // postedAt > agora
+			})),
+			relations: ["createdByPerson", "postedByPerson", "postStatus", "postCategory"],
+			order: { createdAt: "DESC" },
+			skip: (page - 1) * limit,
+			take: limit,
 		});
 
-    	return { data: rows, total };
-  	}
+		return { data: rows, total };
+	}
+
 	
 }

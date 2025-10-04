@@ -1,4 +1,3 @@
-import { PostCategory } from "@/domain/enums/post-category.enum";
 import { PostRepository } from "@/repositories/typeorm/post.repository";
 import { makeUseCase } from "@/use-case/factory/make-use-case";
 import { CreateUseCase } from "@/use-case/post/create";
@@ -12,15 +11,17 @@ const registerBodySchema = z.object({
 	subtitle: z.string(),
 	message: z.string().min(1),
 	image: z.string(),
-	createdAt: z.coerce.date(),
+	// createdAt: z.coerce.date(),
 	createdBy: z.coerce.number(),
-	category: z.nativeEnum(PostCategory), // garante 1..9
-	status: z.coerce.boolean().default(true)
+	category: z.coerce.number(),
+	status: z.coerce.number()
 })
 
 export async function create(req: Request, res: Response) {
 
-	const data: CreatePostDTO = registerBodySchema.parse(req.body)
+	const data: CreatePostDTO = registerBodySchema.parse(req.body);
+
+	console.log('data', data);
 	
 	const createPostUseCase = makeUseCase(CreateUseCase, PostRepository);
 
