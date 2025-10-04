@@ -85,8 +85,6 @@ export class PostRepository {
 
 	async update(data: UpdatePostDTO): Promise<Post> {
 
-		console.log('rep data', data);
-
 		const postedByPerson = await this.createdByRepo.findOne({ where: { id: data.postedBy } })
 		const postStatus = await this.postStatusRepo.findOne({ where: { id: data.status } })
 		const postCategory = await this.postCategoryRepo.findOne({ where: { id: data.category } })

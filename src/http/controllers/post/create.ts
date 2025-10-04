@@ -20,8 +20,6 @@ const registerBodySchema = z.object({
 export async function create(req: Request, res: Response) {
 
 	const data: CreatePostDTO = registerBodySchema.parse(req.body);
-
-	console.log('data', data);
 	
 	const createPostUseCase = makeUseCase(CreateUseCase, PostRepository);
 
