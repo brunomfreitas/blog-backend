@@ -1,3 +1,6 @@
+/** Mantém os comentários @openapi no JS emitido */
+export const __openapi_person = true;
+
 /**
  * @openapi
  * components:

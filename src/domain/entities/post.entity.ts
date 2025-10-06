@@ -58,7 +58,7 @@ export class Post {
   // quem publicou/aprovou o post
   @ManyToOne(() => Category, { nullable: true, eager: false })
   @JoinColumn({ name: 'category', referencedColumnName: 'id' })
-  postCategory: Category
+  postCategory: Category | null
 
   // expõe o ID sem precisar de join
   @RelationId((post: Post) => post.postCategory)
@@ -67,7 +67,7 @@ export class Post {
   // quem publicou/aprovou o post
   @ManyToOne(() => PostStatus, { nullable: true, eager: false })
   @JoinColumn({ name: 'post_status', referencedColumnName: 'id' })
-  postStatus: PostStatus
+  postStatus: PostStatus | null
 
   // expõe o ID sem precisar de join
   @RelationId((post: Post) => post.postStatus)

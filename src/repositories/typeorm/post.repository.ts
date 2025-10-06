@@ -74,7 +74,7 @@ export class PostRepository {
 		createdByPerson: creator,
 		postCategory: postCategory,
 		category: data.category,
-		postStatus: postStatus,		
+		postStatus: postStatus,
 		status: data.status,
 	}
 
