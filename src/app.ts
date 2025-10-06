@@ -6,6 +6,7 @@ import personRoutes from './http/controllers/person/routes';
 import postStatusRoutes from './http/controllers/post-status/routes';
 import postRoutes from './http/controllers/post/routes';
 import userRoutes from './http/controllers/user/routes';
+import { setupSwagger } from './http/helper/setup-swagger';
 import { requireAuth } from './http/middlewares/require-auth';
 import { appDataSource } from './lib/typeorm/typeorm';
 
@@ -15,8 +16,8 @@ export const createApp = async () => {
 	const app = express();
 	app.use(express.json());
 
-	
-	
+	setupSwagger(app);
+
 	app.use('/post', postRoutes);
 	app.use('/auth', AuthRouter);
 

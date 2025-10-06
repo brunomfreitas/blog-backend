@@ -100,3 +100,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA blog TO blog_user;
 
 >> Docker Compose
 	docker-compose up
+
+
+
+# SWAGGER
+
+npm install swagger-ui-express swagger-jsdoc
+npm i --save-dev @types/swagger-jsdoc
+npm i --save-dev @types/swagger-ui-express
