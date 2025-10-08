@@ -22,6 +22,7 @@
  *     UpdateUser:
  *       type: object
  *       properties:
+ *         id: { type: integer, example: 10 }
  *         login: { type: string, example: "bruno.m" }
  *         password: { type: string, example: "newPass123" }
  *         status: { type: boolean, example: false }
@@ -32,7 +33,7 @@
  * @openapi
  * /user:
  *   get:
- *     summary: Lista usuários
+ *     summary: Listar usuários
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -50,7 +51,7 @@
  * @openapi
  * /user:
  *   post:
- *     summary: Cria usuário
+ *     summary: Criar usuário
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -71,7 +72,7 @@
  * @openapi
  * /user/{id}:
  *   get:
- *     summary: Busca usuário por ID
+ *     summary: Buscar usuário por ID
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -91,17 +92,12 @@
 
 /**
  * @openapi
- * /user/{id}:
+ * /user:
  *   put:
- *     summary: Atualiza usuário
+ *     summary: Atualizar usuário
  *     tags: [User]
  *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:

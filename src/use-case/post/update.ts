@@ -5,7 +5,7 @@ import { UpdatePostDTO } from "./post-dtos";
 export class UpdateUseCase {
 	constructor(private repository: PostRepository) {}
 
-	handler(data: UpdatePostDTO) {
-		return this.repository.update(data)
+	handler(id: number, data: UpdatePostDTO) {
+		return this.repository.update(id, data)
 	}
 }

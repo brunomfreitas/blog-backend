@@ -11,7 +11,6 @@ export type CreatePostDTO = {
 }
 
 export type UpdatePostDTO = {
-  id: number
   title: string
   subtitle: string
   message: string

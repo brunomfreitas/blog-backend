@@ -28,6 +28,7 @@ export const __openapi_person = true;
  *     UpdatePerson:
  *       type: object
  *       properties:
+ *         id: { type: integer, example: 1 }
  *         name: { type: string }
  *         cpf: { type: string }
  *         birth: { type: string, format: date }
@@ -39,7 +40,7 @@ export const __openapi_person = true;
  * @openapi
  * /person:
  *   get:
- *     summary: Lista pessoas (paginado)
+ *     summary: Listar pessoas (paginado)
  *     tags: [Person]
  *     parameters:
  *       - $ref: '#/components/parameters/PageParam'
@@ -58,7 +59,7 @@ export const __openapi_person = true;
  * @openapi
  * /person:
  *   post:
- *     summary: Cria uma pessoa
+ *     summary: Criar uma pessoa
  *     tags: [Person]
  *     requestBody:
  *       required: true
@@ -82,7 +83,7 @@ export const __openapi_person = true;
  * @openapi
  * /person/{id}:
  *   get:
- *     summary: Busca pessoa por ID
+ *     summary: Buscar pessoa por ID
  *     tags: [Person]
  *     parameters:
  *       - in: path
@@ -100,15 +101,10 @@ export const __openapi_person = true;
 
 /**
  * @openapi
- * /person/{id}:
+ * /person:
  *   put:
- *     summary: Atualiza uma pessoa
- *     tags: [Person]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
+ *     summary: Atualizar uma pessoa
+ *     tags: [Person] 
  *     requestBody:
  *       required: true
  *       content:

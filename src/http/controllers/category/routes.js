@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var create_1 = require("./create");
+var find_1 = require("./find");
+var find_all_1 = require("./find-all");
+var update_1 = require("./update");
+var categoryRoutes = (0, express_1.Router)();
+categoryRoutes.post("/", create_1.create);
+categoryRoutes.get('/', find_all_1.findAll);
+categoryRoutes.get('/:id', find_1.find);
+categoryRoutes.put('/', update_1.update);
+exports.default = categoryRoutes;

@@ -19,6 +19,7 @@
  *     UpdateCategory:
  *       type: object
  *       properties:
+ *         id: { type: integer, example: 3 }
  *         name: { type: string, example: "Tech (renamed)" }
  *         status: { type: boolean, example: false }
  */
@@ -27,7 +28,7 @@
  * @openapi
  * /category:
  *   get:
- *     summary: Lista categorias
+ *     summary: Listar categorias
  *     tags: [Category]
  *     responses:
  *       '200':
@@ -43,7 +44,7 @@
  * @openapi
  * /category:
  *   post:
- *     summary: Cria categoria
+ *     summary: Criar categoria
  *     tags: [Category]
  *     security:
  *       - bearerAuth: []
@@ -64,7 +65,7 @@
  * @openapi
  * /category/{id}:
  *   get:
- *     summary: Busca categoria por ID
+ *     summary: Buscar categoria por ID
  *     tags: [Category]
  *     parameters:
  *       - in: path
@@ -82,17 +83,12 @@
 
 /**
  * @openapi
- * /category/{id}:
+ * /category:
  *   put:
- *     summary: Atualiza categoria
+ *     summary: Atualizar categoria
  *     tags: [Category]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
  *     requestBody:
  *       required: true
  *       content:

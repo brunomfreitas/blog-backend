@@ -6,7 +6,7 @@ export interface IPostRepository {
 	listAll(page: number, limit: number): Promise<IPost[]>
 	findById(id: number): Promise<IPost | null>
 	create(data: CreatePostDTO): Promise<IPost>
-	update(data: UpdatePostDTO): Promise<IPost>
+	update(id:number, data: UpdatePostDTO): Promise<IPost>
 	delete(id: number): Promise<void>
 	search(q: string, page: number, limit: number): Promise<{ data: IPost[]; total: number; }>;
 }

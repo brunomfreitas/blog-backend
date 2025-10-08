@@ -83,14 +83,14 @@ export class PostRepository {
     return this.repository.save(entity)
   }
 
-	async update(data: UpdatePostDTO): Promise<Post> {
+	async update(id:number, data: UpdatePostDTO): Promise<Post> {
 
 		const postedByPerson = await this.createdByRepo.findOne({ where: { id: data.postedBy } })
 		const postStatus = await this.postStatusRepo.findOne({ where: { id: data.status } })
 		const postCategory = await this.postCategoryRepo.findOne({ where: { id: data.category } })
 
 		const partial: Partial<Post> = {
-			id: data.id,
+			id: id,
 			title: data.title,
 			subtitle: data.subtitle,
 			message: data.message,

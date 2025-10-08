@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var create_1 = require("./create");
+var find_1 = require("./find");
+var find_all_1 = require("./find-all");
+var update_1 = require("./update");
+var postStatusRoutes = (0, express_1.Router)();
+postStatusRoutes.post("/", create_1.create);
+postStatusRoutes.get('/', find_all_1.findAll);
+postStatusRoutes.get('/:id', find_1.find);
+postStatusRoutes.put('/', update_1.update);
+exports.default = postStatusRoutes;

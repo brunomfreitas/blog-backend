@@ -14,9 +14,9 @@ postRoutes.get('/search', search)
 postRoutes.get('/', list)
 
 postRoutes.post('/', requireAuth, create);
-postRoutes.post('/all', requireAuth, listAll);
+postRoutes.get('/all', requireAuth, listAll);
 postRoutes.get('/:id', requireAuth, find)
-postRoutes.put('/', requireAuth, update)
+postRoutes.put('/:id', requireAuth, update)
 postRoutes.delete('/:id', requireAuth, deletePost)
 
 export default postRoutes;

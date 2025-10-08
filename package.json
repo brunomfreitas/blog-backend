@@ -4,7 +4,7 @@
   "description": "npm init -y",
   "main": "server.ts",
   "scripts": {
-    "dev": "tsx -r tsconfig-paths/register watch src/server.ts",
+	"dev": "tsx watch -r tsconfig-paths/register src/server.ts",
     "build": "tsc && tsc-alias && node scripts/generate-swagger.cjs",
     "start": "node dist/server.js"
   },

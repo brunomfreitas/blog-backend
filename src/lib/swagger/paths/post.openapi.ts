@@ -132,7 +132,7 @@
  * @openapi
  * /post:
  *   put:
- *     summary: Atualiza um post
+ *     summary: Atualizar um post
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []

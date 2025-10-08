@@ -19,6 +19,7 @@
  *     UpdatePostStatus:
  *       type: object
  *       properties:
+ *         id: { type: integer, example: 1 }
  *         name: { type: string, example: "ARCHIVED" }
  *         status: { type: boolean, example: false }
  */
@@ -27,7 +28,7 @@
  * @openapi
  * /post-status:
  *   get:
- *     summary: Lista status de post
+ *     summary: Listar status de post
  *     tags: [PostStatus]
  *     responses:
  *       '200':
@@ -43,7 +44,7 @@
  * @openapi
  * /post-status/{id}:
  *   get:
- *     summary: Busca status por ID
+ *     summary: Buscar status por ID
  *     tags: [PostStatus]
  *     parameters:
  *       - in: path
@@ -63,7 +64,7 @@
  * @openapi
  * /post-status:
  *   post:
- *     summary: Cria status de post
+ *     summary: Criar status de post
  *     tags: [PostStatus]
  *     security:
  *       - bearerAuth: []
@@ -82,17 +83,12 @@
 
 /**
  * @openapi
- * /post-status/{id}:
+ * /post-status:
  *   put:
- *     summary: Atualiza status de post
+ *     summary: Atualizar status de post
  *     tags: [PostStatus]
  *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
+ *       - bearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
