@@ -7,22 +7,25 @@ import { env } from '@/env';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
-export const appDataSource = new DataSource({
-  type: 'postgres',
-  host: env.DATABASE_HOST,
-  port: env.DATABASE_PORT,
-  username: env.DATABASE_USER,
-  password: env.DATABASE_PASSWORD,
-  database: env.DATABASE_NAME,
-  entities: [Person, User, Post, PostStatus, Category],
-  logging: env.NODE_ENV === 'development',
-})
+const isTest = env.NODE_ENV === 'test';
 
-appDataSource
-  .initialize()
-  .then(() => {
-    console.log('Database with typeorm connected')
-  })
-  .catch((error) => {
-    console.error('Error connecting to database with typeorm', error)
-  })
+export const appDataSource = new DataSource(
+  isTest
+    ? {
+        type: 'sqlite',
+        database: ':memory:',
+        synchronize: true,           // só em TESTE
+        entities: [__dirname + '/../../domain/entities/*.{ts,js}'],
+        logging: false,
+      }
+    : {
+         type: 'postgres',
+		host: env.DATABASE_HOST,
+		port: env.DATABASE_PORT,
+		username: env.DATABASE_USER,
+		password: env.DATABASE_PASSWORD,
+		database: env.DATABASE_NAME,
+		entities: [Person, User, Post, PostStatus, Category],
+		logging: env.NODE_ENV === 'development',
+      }
+);

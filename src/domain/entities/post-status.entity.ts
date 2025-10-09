@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { IPostStatus } from '../interfaces/post-status.interface'
 
-@Entity({ name: 'blog.post_status' })
+@Entity({ schema: 'blog', name: 'post_status' })
 export class PostStatus implements IPostStatus {
   
 	@PrimaryGeneratedColumn()

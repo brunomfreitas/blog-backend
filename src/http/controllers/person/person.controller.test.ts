@@ -1,10 +1,10 @@
 // src/http/controllers/person/person.controller.test.ts
-import { createApp } from '@/app';
-import { Person } from '@/domain/entities/person.entity';
-import { appDataSource } from '@/lib/typeorm/typeorm';
-import { formatDate } from '@/utils/format-date';
 import type { Express } from 'express';
 import request from 'supertest';
+import { createApp } from '../../../app';
+import { Person } from '../../../domain/entities/person.entity';
+import { appDataSource } from '../../../lib/typeorm/typeorm';
+import { formatDate } from '../../../utils/format-date';
 
 let app: Express;
 

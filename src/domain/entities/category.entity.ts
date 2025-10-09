@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { ICategory } from '../interfaces/category.interface'
 
 
-@Entity({ name: 'blog.category' })
+@Entity({ schema: 'blog', name: 'category' })
 export class Category implements ICategory {
   
 	@PrimaryGeneratedColumn()

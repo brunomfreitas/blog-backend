@@ -45,3 +45,6 @@ src/
 ├── utils/ # Códigos comuns em toda a aplicação
 │
 └── server.ts # Ponto de entrada da aplicação
+
+
+# Testes

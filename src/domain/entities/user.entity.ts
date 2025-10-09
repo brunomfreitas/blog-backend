@@ -9,9 +9,7 @@ import {
 import { IUser } from '../interfaces/user.interface'
 import { Person } from './person.entity'
 
-@Entity({
-  name: 'blog.user',
-})
+@Entity({ schema: 'blog', name: 'user' })
 export class User implements IUser {
   @PrimaryGeneratedColumn()
   id?: number | undefined

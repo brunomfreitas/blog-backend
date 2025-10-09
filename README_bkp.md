@@ -108,3 +108,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA blog TO blog_user;
 npm install swagger-ui-express swagger-jsdoc
 npm i --save-dev @types/swagger-jsdoc
 npm i --save-dev @types/swagger-ui-express
+
+# Testes
+
+npm install --save-dev jest
+npm install --save-dev @types/jest
+npm install supertest --save-dev
+npm i --save-dev @types/supertest
+npm i -D ts-jest @types/jest supertest @types/supertest
+

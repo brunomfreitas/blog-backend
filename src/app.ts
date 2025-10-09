@@ -11,7 +11,11 @@ import { setupSwagger } from './lib/swagger/setup-swagger';
 import { appDataSource } from './lib/typeorm/typeorm';
 
 export const createApp = async () => {
-	await appDataSource.initialize();
+	
+	if (!appDataSource.isInitialized) {
+    	await appDataSource.initialize();
+  	}
+  
 
 	const app = express();
 	app.use(express.json());

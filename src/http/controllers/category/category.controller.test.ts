@@ -1,12 +1,12 @@
 // src/http/controllers/person/person.controller.test.ts
-import { createApp } from '@/app';
-import { Category } from '@/domain/entities/category.entity';
-import { User } from '@/domain/entities/user.entity';
-import { env } from '@/env';
-import { appDataSource } from '@/lib/typeorm/typeorm';
 import bcrypt from 'bcryptjs';
 import type { Express } from 'express';
 import request from 'supertest';
+import { createApp } from '../../../app';
+import { Category } from '../../../domain/entities/category.entity';
+import { User } from '../../../domain/entities/user.entity';
+import { env } from '../../../env';
+import { appDataSource } from '../../../lib/typeorm/typeorm';
 
 let app: Express;
 let token: string;

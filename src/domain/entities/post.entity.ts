@@ -1,12 +1,14 @@
 // post.entity.ts
 import {
 	Column,
+	CreateDateColumn,
 	Entity,
 	Index,
 	JoinColumn,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 	RelationId,
+	UpdateDateColumn,
 } from 'typeorm'
 import { Category } from './category.entity'
 import { Person } from './person.entity'
@@ -29,10 +31,10 @@ export class Post {
   @Column({ name: 'image', type: 'text', nullable: true })
   image!: string | null
 
-  @Column({ name: 'createdat', type: 'timestamp', default: () => 'now()' })
+  @CreateDateColumn({ name: 'createdat'})
   createdAt!: Date
 
-  @Column({ name: 'postedat', type: 'timestamp', nullable: true })
+  @UpdateDateColumn({ name: 'postedat' })
   postedAt!: Date | null
 
   // ===== Relacionamentos =====

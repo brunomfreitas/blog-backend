@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { IPerson } from '../interfaces/person.interface'
 
-@Entity({ name: 'blog.person' })
+@Entity({ schema: 'blog', name: 'person' })
 export class Person implements IPerson {
   
 	@PrimaryGeneratedColumn()
@@ -13,7 +13,7 @@ export class Person implements IPerson {
 	@Column({ name: 'cpf',type: 'varchar' })
 	cpf: string
 
-	@Column({ name: 'birth', type: 'date' })
+	@Column({ name: 'birth' })
 	birth: Date
 
 	@Column({ name: 'email', type: 'varchar' })
