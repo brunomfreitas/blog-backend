@@ -107,15 +107,14 @@ export class PostRepository {
 		if (data.postedBy === null) {  
 			partial.postedByPerson = null
 		} else if (typeof data.postedBy === 'number') {
-		
-		// (B) validando existência:
+				
 		const person = await this.postedByRepo.findOne({ where: { id: data.postedBy } })
 			if (!person) throw new Error('Person not found')
 				partial.postedByPerson = person
 		}
 
 		const entity = await this.repository.preload(partial)
-		if (!entity) throw new Error('Post not found') // id inexistente
+		if (!entity) throw new Error('Post not found')
 
     	return this.repository.save(entity)
 	}
@@ -130,14 +129,14 @@ export class PostRepository {
 		const where = [
 			{ title: ILike(`%${q}%`) },
 			{ message: ILike(`%${q}%`) },
-			{ subtitle: ILike(`%${q}%`) }, // se quiser incluir também o subtitle
+			{ subtitle: ILike(`%${q}%`) },
 		];
 
 		const [rows, total] = await this.repository.findAndCount({
 			where: where.map((condition) => ({
 			...condition,
-			postStatus: { name: "Publicado" }, // filtra pelo nome
-			postedAt: MoreThan(now),           // postedAt > agora
+			postStatus: { name: "Publicado" },
+			postedAt: MoreThan(now),
 			})),
 			relations: ["createdByPerson", "postedByPerson", "postStatus", "postCategory"],
 			order: { createdAt: "DESC" },

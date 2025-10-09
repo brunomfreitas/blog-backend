@@ -33,7 +33,7 @@
  * @openapi
  * /post:
  *   get:
- *     summary: Lista posts publicados (paginado)
+ *     summary: Listar posts publicados (paginado)
  *     description: Retorna posts com status "Publicado" e postedAt > agora (conforme regra atual do repositório).
  *     tags: [Post]
  *     parameters:
@@ -53,7 +53,7 @@
  * @openapi
  * /post:
  *   post:
- *     summary: Cria um post
+ *     summary: Criar um post
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
@@ -81,7 +81,7 @@
  * @openapi
  * /post/all:
  *   post:
- *     summary: Lista todos os posts (admin/privado)
+ *     summary: Listar todos os posts
  *     description: Retorna todos os posts (sem filtro de published/postedAt). Mantido como POST para refletir a rota existente.
  *     tags: [Post]
  *     security:
@@ -107,7 +107,7 @@
  * @openapi
  * /post/{id}:
  *   get:
- *     summary: Busca post por ID
+ *     summary: Buscar post por ID
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
@@ -157,7 +157,7 @@
  * @openapi
  * /post/{id}:
  *   delete:
- *     summary: Remove um post
+ *     summary: Remover um post
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []

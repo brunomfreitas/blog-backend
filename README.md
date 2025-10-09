@@ -1,110 +1,47 @@
-### ############### ###
-### Projeto BackEnd ###
-### ############### ###
+# 📰 Blog Backend
 
-# Estrutura de pasta:
-domain
-   | --> entities
-   | --> enums
-   | --> interfaces
+API backend desenvolvida em **Node.js (TypeScript)** com **Express**, **TypeORM**, **PostgreSQL** e **Swagger** para documentação.  
+O projeto implementa princípios de **Clean Architecture** e **SOLID**, separando responsabilidades em camadas bem definidas.
 
-http
-   | --> controllers
-   | --> middlewares
-   | --> docs
-   | --> helper
+---
 
-lib
-   | --> typeorm
+## 🚀 Tecnologias Principais
 
-repositories
-   | --> typeorm
+- **Node.js** + **TypeScript**
+- **Express** — Servidor HTTP
+- **TypeORM** — ORM para PostgreSQL
+- **Zod** — Validação de dados
+- **Swagger UI + swagger-jsdoc** — Documentação automática da API
+- **JWT (jsonwebtoken)** — Autenticação
+- **bcryptjs** — Criptografia de senhas
+- **Docker + Docker Compose** — Ambiente de execução isolado
 
-use-case
+---
 
-# Bibliotecas:
-	Node.js (Typescript)
-	TypeOrm
-	Express
-	zod
-	postgres
-	swagger
+## 🏗️ Arquitetura e Estrutura de Pastas
 
-
-	jsonwebtoken
-	bcryptjs
-
-# P1 - Para criar um projeto do Zero
-npm init -y
-
-npm install express
-
-npm i -D @types/node tsup tsx typescript
-
-npx tsc --init
-
-npm i dotenv zod
-
-
-
-# TypeORM
-https://typeorm.io/docs/getting-started
-
-npm install typeorm
-npm install reflect-metadata
-npm install pg
-
-npx typeorm init --name blog --database postgres
-
-
-
-# P2 - Preparar ambiente docker
-> Rede
-docker network create --driver bridge blog-network
-
-> Volume para o banco de dados
-docker volume create blogpgdata
-
-# P3 - Criar conteiner a partir da imagem cognitio-postgres
-docker run -d --name blog-pg --network blog-network -e POSTGRES_USER="admin" -e POSTGRES_PASSWORD="blog" -e POSTGRES_DB="blog" -v blogpgdata:/var/lib/postgresql/data -p 5433:5432 cognitio-postgres:17
-
-# P4 - Configuração do banco de dados
-
-1. Criar o schema (se ainda não criou):
-CREATE SCHEMA blog;
-
-2. Criar um usuário para a aplicação:
-CREATE USER blog_user WITH PASSWORD 'blog_user';
-
-3. Dar permissão para esse usuário acessar o schema:
-GRANT USAGE ON SCHEMA blog TO blog_user;
-
-4. Dar permissão para criar/usar tabelas no schema:
-GRANT CREATE ON SCHEMA blog TO blog_user;
-
-5. Garantir acesso às tabelas futuras:
-ALTER DEFAULT PRIVILEGES IN SCHEMA blog
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO blog_user;
-
-6. Caso já existam tabelas no schema, conceder acesso nelas:
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA blog TO blog_user;
-
-
-
-
-
-# DOCKER
->> Dockerfile
-	docker build -t blog-backend:prod .
-
-
->> Docker Compose
-	docker-compose up
-
-
-
-# SWAGGER
-
-npm install swagger-ui-express swagger-jsdoc
-npm i --save-dev @types/swagger-jsdoc
-npm i --save-dev @types/swagger-ui-express
+src/
+├── domain/
+|	├── entities/ # Entidades de domínio (User, Post, etc)
+│ 	├── enums/ # Enumerações globais
+│ 	└── interfaces/ # Contratos e tipos
+│
+├── http/
+│ 	├── controllers/ # Controladores Express (rotas e handlers)
+│ 	└── middlewares/ # Middlewares globais (auth, error handler, etc)
+│
+├── lib/
+│ 	├── auth/ # Configuração do JWT
+│ 	├── typeorm/ # Configuração do TypeORM e DataSource
+│ 	└── swagger/ # Setup do Swagger e geração de JSON
+│ 			├── docs/ # Schemas OpenAPI (Swagger)
+│ 			└── paths/ # Serviços OpenAPI (Swagger)
+│
+├── repositories/
+│ 	└── typeorm/ # Repositórios que acessam o banco via TypeORM
+│
+├── use-case/ # Casos de uso (regras de negócio)
+|
+├── utils/ # Códigos comuns em toda a aplicação
+│
+└── server.ts # Ponto de entrada da aplicação
