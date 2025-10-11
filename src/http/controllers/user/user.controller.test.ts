@@ -70,7 +70,7 @@ describe('[HTTP] CategoryController', () => {
 			status: true
 		};
 		
-		const personResp = await request(app).post('/person').send(person);
+		const personResp = await request(app).post('/person').set('Authorization', `Bearer ${token}`).send(person);
 		
 		const personId = personResp.body.id;
 		
@@ -90,7 +90,7 @@ describe('[HTTP] CategoryController', () => {
 
 	});
   
-  it('PUT /user deve atualizar um usuário', async () => {
+  	it('PUT /user deve atualizar um usuário', async () => {
 
 		const person = {
 			name: 'Teste',
@@ -100,7 +100,7 @@ describe('[HTTP] CategoryController', () => {
 			status: true
 		};
 		
-		const personResp = await request(app).post('/person').send(person);
+		const personResp = await request(app).post('/person').set('Authorization', `Bearer ${token}`).send(person);
 		
 		const personId = personResp.body.id;
 		
@@ -127,7 +127,6 @@ describe('[HTTP] CategoryController', () => {
 		expect(res.body).toHaveProperty('id');
 		expect(res.body).toEqual(expect.objectContaining(update));
 
-
 	});
 
 	it('GET /user deve retornar um usuário (200)', async () => {
@@ -140,17 +139,17 @@ describe('[HTTP] CategoryController', () => {
 			status: true
 		};
 		
-		const personResp = await request(app).post('/person').send(person);
+		const personResp = await request(app).post('/person').set('Authorization', `Bearer ${token}`).send(person);
 		
 		const personId = personResp.body.id;
 		
-		const payload = {	
+		const user = {	
 			login: "teste.user",
 			password: "123456",
 			personid: personId
 		};
 
-		const userResp = await request(app).post('/user').set('Authorization', `Bearer ${token}`).send(payload);
+		const userResp = await request(app).post('/user').set('Authorization', `Bearer ${token}`).send(user);
 
 		const id = userResp.body.id;
 

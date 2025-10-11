@@ -5,7 +5,7 @@ import { PostStatus } from '@/domain/entities/post-status.entity'
 import { Post } from '@/domain/entities/post.entity'
 import { appDataSource } from '@/lib/typeorm/typeorm'
 import { CreatePostDTO, UpdatePostDTO } from '@/use-case/post/post-dtos'
-import { ILike, MoreThan, Repository } from 'typeorm'
+import { ILike, LessThanOrEqual, Repository } from 'typeorm'
 
 export class PostRepository {
   private repository: Repository<Post>
@@ -28,7 +28,7 @@ export class PostRepository {
     return this.repository.find({
 		where: {			
 			postStatus: { name: "Publicado" },
-			postedAt: MoreThan(now),
+			postedAt: LessThanOrEqual(now),
 		},
 	    order: { postedAt: 'DESC', id: 'DESC' },
       	relations: ['createdByPerson', 'postedByPerson', 'postStatus', 'postCategory'],
@@ -83,7 +83,15 @@ export class PostRepository {
     return this.repository.save(entity)
   }
 
-	async update(id:number, data: UpdatePostDTO): Promise<Post> {
+	async update(id: number, data: UpdatePostDTO): Promise<Post> {
+
+		 // 1) Carrega o post por id
+		const post = await this.repository.findOne({ where: { id } });
+		if (!post) {
+			const err: any = new Error('Post not found');
+			err.status = 404;
+			throw err;
+		}
 
 		const postedByPerson = await this.createdByRepo.findOne({ where: { id: data.postedBy } })
 		const postStatus = await this.postStatusRepo.findOne({ where: { id: data.status } })
@@ -136,7 +144,7 @@ export class PostRepository {
 			where: where.map((condition) => ({
 			...condition,
 			postStatus: { name: "Publicado" },
-			postedAt: MoreThan(now),
+			postedAt: LessThanOrEqual(now),
 			})),
 			relations: ["createdByPerson", "postedByPerson", "postStatus", "postCategory"],
 			order: { createdAt: "DESC" },

@@ -5,10 +5,10 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 export async function find(req: Request, res: Response) {
-  
+
 	const registerParamsSchema = z.object({
-    	id: z.coerce.number(),
-  	})
+		id: z.coerce.number(),
+	})
 
   	const { id } = registerParamsSchema.parse(req.params)
 

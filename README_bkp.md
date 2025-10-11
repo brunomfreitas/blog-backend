@@ -3,24 +3,32 @@
 ### ############### ###
 
 # Estrutura de pasta:
-domain
-   | --> entities
-   | --> enums
-   | --> interfaces
 
-http
-   | --> controllers
-   | --> middlewares
-   | --> docs
-   | --> helper
-
-lib
-   | --> typeorm
-
-repositories
-   | --> typeorm
-
-use-case
+src/
+├── domain/
+|	├── entities/ # Entidades de domínio (User, Post, etc)
+│ 	├── enums/ # Enumerações globais
+│ 	└── interfaces/ # Contratos e tipos
+│
+├── http/
+│ 	├── controllers/ # Controladores Express (rotas e handlers)
+│ 	└── middlewares/ # Middlewares globais (auth, error handler, etc)
+│
+├── lib/
+│ 	├── auth/ # Configuração do JWT
+│ 	├── typeorm/ # Configuração do TypeORM e DataSource
+│ 	└── swagger/ # Setup do Swagger e geração de JSON
+│ 			├── docs/ # Schemas OpenAPI (Swagger)
+│ 			└── paths/ # Serviços OpenAPI (Swagger)
+│
+├── repositories/
+│ 	└── typeorm/ # Repositórios que acessam o banco via TypeORM
+│
+├── use-case/ # Casos de uso (regras de negócio)
+|
+├── utils/ # Códigos comuns em toda a aplicação
+│
+└── server.ts # Ponto de entrada da aplicação
 
 # Bibliotecas:
 	Node.js (Typescript)

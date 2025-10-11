@@ -80,7 +80,7 @@
 /**
  * @openapi
  * /post/all:
- *   post:
+ *   get:
  *     summary: Listar todos os posts
  *     description: Retorna todos os posts (sem filtro de published/postedAt). Mantido como POST para refletir a rota existente.
  *     tags: [Post]
@@ -130,12 +130,17 @@
 
 /**
  * @openapi
- * /post:
+ *  /post/{id}:
  *   put:
  *     summary: Atualizar um post
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
  *     requestBody:
  *       required: true
  *       content:

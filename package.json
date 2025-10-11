@@ -6,11 +6,10 @@
   "scripts": {
     "dev": "tsx watch -r tsconfig-paths/register src/server.ts",
     "build": "tsc && tsc-alias && node scripts/generate-swagger.cjs",
-    "start": "node dist/server.js",
-    "test": "jest",
-    "test:test": "NODE_ENV=test jest --passWithNoTests",
-    "test:watch": "cross-env NODE_ENV=test jest --watch",
-    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
+    "start": "node dist/server.js",    
+    "test": "NODE_ENV=test jest --passWithNoTests",
+    "test:watch": "NODE_ENV=test jest --watchAll",
+    "test:coverage": "NODE_ENV=test jest --coverage"
   },
   "keywords": [],
   "author": "",

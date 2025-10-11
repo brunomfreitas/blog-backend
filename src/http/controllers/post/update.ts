@@ -8,12 +8,12 @@ import { z } from 'zod'
 export async function update(req: Request, res: Response) {
 
 	const registerParamsSchema = z.object({
-    	id: z.coerce.number(),
+		id: z.coerce.number(),
   	})
 
-  	const { id } = registerParamsSchema.parse(req.params)	
-	
-	const registerBodySchema = z.object({		
+	const { id } = registerParamsSchema.parse(req.params)
+
+	const registerBodySchema = z.object({
 		title: z.string().min(1),
 		subtitle: z.string(),
 		message: z.string().min(1),
@@ -24,11 +24,12 @@ export async function update(req: Request, res: Response) {
 		status: z.coerce.number()
 	})
 
-  	const data: UpdatePostDTO = registerBodySchema.parse(req.body)
+	const data: UpdatePostDTO = registerBodySchema.parse(req.body)
 
-  	const updateUseCase = makeUseCase(UpdateUseCase, PostRepository)
+	const updateUseCase = makeUseCase(UpdateUseCase, PostRepository)
 
-  	const user = await updateUseCase.handler(id, data)
+	const post = await updateUseCase.handler(id, data)
+	
+  	return res.status(200).json(post)
 
-  	return res.status(200).json(user)
 }

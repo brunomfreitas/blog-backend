@@ -19,38 +19,38 @@
  *           format: date-time
  *           nullable: true
  *           example: "2025-10-01T09:00:00.000Z"
- *         createdBy: { type: integer, example: 42 }
- *         postedBy: { type: integer, nullable: true, example: 84 }
- *         category: { type: integer, example: 3 }
- *         status:
- *           type: string
- *           enum: [DRAFT, PUBLISHED]
- *           example: PUBLISHED
+ *         createdBy: { type: integer, example: 1 }
+ *         postedBy: { type: integer, nullable: true, example: 1 }
+ *         category: { type: integer, example: 1 }
+ *         status: { type: integer, example: 1 }
  *
  *     CreatePost:
  *       type: object
  *       required: [title, message, status]
  *       properties:
  *         title: { type: string, example: "My first post" }
- *         subtitle: { type: string, nullable: true }
- *         message: { type: string }
- *         image: { type: string, nullable: true }
- *         category: { type: integer, example: 3 }
- *         status:
- *           type: string
- *           enum: [DRAFT, PUBLISHED]
+ *         subtitle: { type: string, nullable: true, example: "subtitle subtitle" }
+ *         message: { type: string, example: "message message" }
+ *         image: { type: string, nullable: true, example: "https://image/post.png" }
+ *         createdBy: { type: integer, example: 1 }
+ *         category: { type: integer, example: 1 }
+ *         status: { type: integer, example: 1 }
  *
  *     UpdatePost:
  *       type: object
  *       properties:
- *         title: { type: string }
- *         subtitle: { type: string, nullable: true }
- *         message: { type: string }
- *         image: { type: string, nullable: true }
- *         category: { type: integer }
- *         status:
+ *         title: { type: string, example: "My first update post" }
+ *         subtitle: { type: string, nullable: true, example: "update subtitle" }
+ *         message: { type: string, example: "update message" }
+ *         image: { type: string, nullable: true, example: "https://image-update/post.png" }
+ *         postedBy: { type: integer, nullable: true, example: 1 }
+ *         postedAt:
  *           type: string
- *           enum: [DRAFT, PUBLISHED]
+ *           format: date-time
+ *           nullable: true
+ *           example: "2025-10-01T09:00:00.000Z"
+ *         category: { type: integer, example: 1 }
+ *         status: { type: integer, example: 1 }
  */
 export { };
 

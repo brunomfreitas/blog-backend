@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { IPerson } from '../interfaces/person.interface'
+import 'reflect-metadata';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { IPerson } from '../interfaces/person.interface';
 
 @Entity({ schema: 'blog', name: 'person' })
 export class Person implements IPerson {
@@ -10,10 +11,10 @@ export class Person implements IPerson {
 	@Column({ name: 'name',	type: 'varchar' })
 	name: string
 
-	@Column({ name: 'cpf',type: 'varchar' })
+	@Column({ name: 'cpf', type: 'varchar' })
 	cpf: string
 
-	@Column({ name: 'birth' })
+	@Column({ name: 'birth', type: 'date' })
 	birth: Date
 
 	@Column({ name: 'email', type: 'varchar' })

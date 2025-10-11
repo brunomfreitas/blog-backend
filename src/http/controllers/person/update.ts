@@ -5,7 +5,6 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 export async function update(req: Request, res: Response) {
-  
 
   	const registerBodySchema = z.object({    
 		id: z.coerce.number(),

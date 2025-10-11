@@ -35,7 +35,7 @@ AuthRouter.post('/register', async (req: Request, res: Response) => {
     login,
     password: passwordHash,
     status: true,
-    person, // <- define a relação
+    person,
   })
   await userRepo.save(user)
 
@@ -62,7 +62,7 @@ AuthRouter.post('/login', async (req: Request, res: Response) => {
 
   const user = await userRepo.findOne({
     where: { login },
-    relations: ['person'], // carrega a relação (para personId via RelationId)
+    relations: ['person'],
   })
   if (!user) return res.status(401).json({ message: 'Invalid credentials' })
 
@@ -101,4 +101,4 @@ AuthRouter.get('/me', requireAuth, async (req: Request, res: Response) => {
   })
 })
 
-export default AuthRouter; // <- facilita importar como default
+export default AuthRouter;
