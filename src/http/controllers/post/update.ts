@@ -22,8 +22,8 @@ export async function update(req: Request, res: Response) {
 		image: z.string(),		
 		category: z.coerce.number(),
 		status: z.coerce.number(),
-		...(isPublish && { postedAt: z.coerce.date(),
-		postedBy: z.coerce.number()})
+		postedAt: z.coerce.date().optional(),
+		postedBy: z.coerce.number().optional()		
 	});
 
 	const data: UpdatePostDTO = registerBodySchema.parse(req.body);
