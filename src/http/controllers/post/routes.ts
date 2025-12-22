@@ -12,11 +12,10 @@ const postRoutes = Router();
 
 postRoutes.get('/search', search)
 postRoutes.get('/', list)
-
-postRoutes.post('/', requireAuth, create);
 postRoutes.get('/all', requireAuth, listAll);
-postRoutes.get('/:id', requireAuth, find)
+postRoutes.post('/', requireAuth, create);
 postRoutes.put('/:id', requireAuth, update)
 postRoutes.delete('/:id', requireAuth, deletePost)
+postRoutes.get('/:id', find)
 
 export default postRoutes;

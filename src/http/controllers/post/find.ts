@@ -10,7 +10,10 @@ export async function find(req: Request, res: Response) {
     	id: z.coerce.number(),
   	})
 
-  	const { id } = registerParamsSchema.parse(req.params)
+	console.log("req.query", req.query);
+  	console.log("req.body", req.body);
+	console.log("req.params", req.params);
+	const { id } = registerParamsSchema.parse(req.params)
 
   	const findUseCase = makeUseCase(FindUseCase, PostRepository)
 

@@ -13,18 +13,20 @@ export async function update(req: Request, res: Response) {
 
 	const { id } = registerParamsSchema.parse(req.params)
 
+	const isPublish = Boolean(req.body.status === 7);
+	
 	const registerBodySchema = z.object({
 		title: z.string().min(1),
 		subtitle: z.string(),
 		message: z.string().min(1),
-		image: z.string(),
-		postedAt: z.coerce.date(),
-		postedBy: z.coerce.number(),
+		image: z.string(),		
 		category: z.coerce.number(),
-		status: z.coerce.number()
-	})
+		status: z.coerce.number(),
+		...(isPublish && { postedAt: z.coerce.date(),
+		postedBy: z.coerce.number()})
+	});
 
-	const data: UpdatePostDTO = registerBodySchema.parse(req.body)
+	const data: UpdatePostDTO = registerBodySchema.parse(req.body);
 
 	const updateUseCase = makeUseCase(UpdateUseCase, PostRepository)
 

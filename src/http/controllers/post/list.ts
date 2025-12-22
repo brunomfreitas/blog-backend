@@ -9,13 +9,14 @@ export async function list(req: Request, res: Response) {
 	const registerQuerySchema = z.object({
     	page: z.coerce.number().default(1),
     	limit: z.coerce.number().default(10),
+		category: z.coerce.number().optional(),
   	})
 
-  	const { page, limit } = registerQuerySchema.parse(req.query)
+  	const { page, limit, category } = registerQuerySchema.parse(req.query)
 
   	const listUseCase = makeUseCase(ListUseCase, PostRepository)
 
-  	const data = await listUseCase.handler(page, limit)
+  	const data = await listUseCase.handler(page, limit, category )
 
   	return res.status(200).json(data)
 }

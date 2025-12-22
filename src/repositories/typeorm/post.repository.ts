@@ -22,18 +22,19 @@ export class PostRepository {
   	this.postCategoryRepo = appDataSource.getRepository(Category)
   }
 
-  async list(page: number, limit: number): Promise<Post[]> {
+  async list(page: number, limit: number, category: number): Promise<Post[]> {
 	const now = new Date();
 
-    return this.repository.find({
+	return this.repository.find({
 		where: {			
 			postStatus: { name: "Publicado" },
 			postedAt: LessThanOrEqual(now),
+      		...(category ? { postCategory: { id: category } } : {}), // ✅ aqui
 		},
 	    order: { postedAt: 'DESC', id: 'DESC' },
       	relations: ['createdByPerson', 'postedByPerson', 'postStatus', 'postCategory'],
-		skip: (page - 1) * limit,
-      	take: limit,
+		// skip: (page - 1) * limit,
+      	// take: limit,
     })
   }
 

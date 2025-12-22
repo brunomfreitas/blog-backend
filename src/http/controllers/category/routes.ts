@@ -1,3 +1,4 @@
+import { requireAuth } from "@/http/middlewares/require-auth";
 import { Router } from "express";
 import { create } from "./create";
 import { find } from "./find";
@@ -6,9 +7,10 @@ import { update } from "./update";
 
 const categoryRoutes = Router();
 
-categoryRoutes.post("/", create);
 categoryRoutes.get('/', findAll)
-categoryRoutes.get('/:id', find)
-categoryRoutes.put('/', update)
+
+categoryRoutes.post("/", requireAuth, create);
+categoryRoutes.get('/:id', requireAuth, find)
+categoryRoutes.put('/', requireAuth, update)
 
 export default categoryRoutes;

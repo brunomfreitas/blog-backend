@@ -16,7 +16,7 @@ export type UpdatePostDTO = {
   message: string
   image: string  
   postedAt?: Date
-  postedBy?: number  
+  postedBy?: number
   category: number
   status: number
 }

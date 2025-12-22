@@ -83,12 +83,16 @@ AuthRouter.post('/login', async (req: Request, res: Response) => {
 
 // -------- me --------
 AuthRouter.get('/me', requireAuth, async (req: Request, res: Response) => {
+
+	res.setHeader('Cache-Control', 'no-store');
+
   const { sub: userId } = (req as any).user as { sub: number; pid: number; login: string }
 
   const user = await userRepo.findOne({
     where: { id: userId },
     relations: ['person'],
   })
+
   if (!user) return res.status(404).json({ message: 'User not found' })
 
   return res.json({
