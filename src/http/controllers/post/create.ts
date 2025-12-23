@@ -10,8 +10,7 @@ const registerBodySchema = z.object({
 	title: z.string().min(1),
 	subtitle: z.string(),
 	message: z.string().min(1),
-	image: z.string(),
-	// createdAt: z.coerce.date(),
+	image: z.string().url().nullable().optional(),
 	createdBy: z.coerce.number(),
 	category: z.coerce.number(),
 	status: z.coerce.number()

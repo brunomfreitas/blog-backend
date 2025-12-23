@@ -17,9 +17,9 @@ export async function update(req: Request, res: Response) {
 	
 	const registerBodySchema = z.object({
 		title: z.string().min(1),
-		subtitle: z.string(),
-		message: z.string().min(1),
-		image: z.string(),		
+		subtitle: z.string().optional(),
+		message: z.string().min(1),		
+        image: z.string().url().nullable().optional(), // ✅ aceita string, null, ou undefined	
 		category: z.coerce.number(),
 		status: z.coerce.number(),
 		postedAt: z.coerce.date().optional(),
