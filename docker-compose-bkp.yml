@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  postgres:
+  blog-postgres:
     image: postgres:alpine
     ports:
       - "5433:5432"
@@ -20,15 +20,16 @@ services:
       timeout: 3s
       retries: 10
 
-  backend:
-    image: brunomfreitas/blog-backend:latest
+  app:
+    build:
+      context: .
     ports:
       - "3000:3000"
     depends_on:
-      postgres:
+      blog-postgres:
         condition: service_healthy
     environment:
-      DATABASE_HOST: postgres
+      DATABASE_HOST: blog-postgres
       DATABASE_NAME: blog
       DATABASE_USER: blog_user
       DATABASE_PASSWORD: blog_password
@@ -36,15 +37,6 @@ services:
       JWT_SECRET: e14ec713-b091-47d2-a649-f9b085ab9c6f
       JWT_EXPIRES_IN: 1d
       NODE_ENV: production
-    networks:
-      - blog-network
-
-  frontend:
-    image: brunomfreitas/blog-frontend:latest
-    ports:
-      - "5173:80"
-    depends_on:
-      - backend
     networks:
       - blog-network
 
