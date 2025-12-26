@@ -3,7 +3,7 @@ export interface IPost {
   title: string | null
   subtitle: string | null
   message: string
-  image: string | null
+  image?: string | null
   createdAt: Date
   createdBy: number
   postedAt?: Date | null
