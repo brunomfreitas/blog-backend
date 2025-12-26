@@ -21,7 +21,6 @@ INSERT INTO BLOG.PERSON (NAME, CPF, BIRTH, EMAIL, STATUS) VALUES ('Maria', '000.
 INSERT INTO BLOG.USER (LOGIN, PASSWORD, STATUS, ID_PERSON) VALUES ('joao', '$2b$10$8MUDPrLSR4VB/Kvxz39bUuG0OhdHeiQHKIEM4CGBSNtqbs7M6QndW', true, 1);
 INSERT INTO BLOG.USER (LOGIN, PASSWORD, STATUS, ID_PERSON) VALUES ('maria', '$2b$10$knhaJjnFXTOP3fdrOdj40O/BwKrE3I7sV.dMJPisCA6NgsrPvicUS', true, 2);
 
-
 -- CARGA DE POSTAGEM
 INSERT INTO blog.post (title, subtitle, message, image, createdat, createdby, postedat, postedby, category, post_status) VALUES
 ('Globalização e seus impactos no mundo atual', 'Entenda como a globalização influencia a economia, a cultura e as relações entre os países', 'A globalização é um processo caracterizado pela intensificação das relações econômicas, culturais e sociais entre os países. Com o avanço dos meios de transporte e comunicação, o mundo tornou-se mais conectado, facilitando o fluxo de informações, mercadorias e pessoas.
