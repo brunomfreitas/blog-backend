@@ -16,8 +16,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 COPY package*.json ./
-#RUN npm install
-RUN npm ci --omit=dev
+RUN npm install
+#RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
