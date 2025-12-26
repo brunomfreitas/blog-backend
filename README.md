@@ -165,10 +165,6 @@ npm run test:coverage
 
 > Verifique o `docker-compose.yml` do projeto para confirmar as portas/credenciais mapeadas.
 
----
-
-
-
 # DOCKER
 # Para subir o projeto usando 
 
