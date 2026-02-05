@@ -5,18 +5,19 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 export async function update(req: Request, res: Response) {
-
+		
   	const registerBodySchema = z.object({    
 		id: z.coerce.number(),
 		name: z.string(),
 		cpf: z.string(),
 		birth: z.coerce.date(),
 		email: z.string().email(),
+		type_person: z.string(),
 		status: z.coerce.boolean(),
 	})
 
-  	const { id, name, cpf, birth, email, status } = registerBodySchema.parse(req.body)
-
+	const { id, name, cpf, birth, email, type_person, status } = registerBodySchema.parse(req.body)
+		
   	const updateUseCase = makeUseCase(UpdateUseCase, PersonRepository)
 
   	const data = await updateUseCase.handler({
@@ -25,6 +26,7 @@ export async function update(req: Request, res: Response) {
 		cpf,
 		birth,
 		email,
+		type_person,
 		status
 	})
 

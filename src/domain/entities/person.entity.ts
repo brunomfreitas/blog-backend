@@ -20,6 +20,9 @@ export class Person implements IPerson {
 	@Column({ name: 'email', type: 'varchar' })
 	email: string
 
+	@Column({ name: 'type_person', type: 'varchar' })
+	type_person: string
+
 	@Column({ name: 'status', type: 'boolean', default: true })
 	status: boolean
 

@@ -11,10 +11,11 @@ export async function create(req: Request, res: Response) {
 		cpf: z.string(),
 		birth: z.coerce.date(),
 		email: z.string().email(),
+		type_person: z.string(),
 		status: z.coerce.boolean(),
 	})
 
-	const { cpf, name, birth, email, status } = registerBodySchema.parse(req.body)
+	const { cpf, name, birth, email, type_person, status } = registerBodySchema.parse(req.body)
 	
 	const createPersonUseCase = makeUseCase(CreatePersonUseCase, PersonRepository);
 
@@ -23,6 +24,7 @@ export async function create(req: Request, res: Response) {
 		name,
 		birth,
 		email,
+		type_person,
 		status: status ?? true
 	})
 

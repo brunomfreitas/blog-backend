@@ -10,12 +10,12 @@ export async function find(req: Request, res: Response) {
 		id: z.coerce.number(),
 	})
 
-  	const { id } = registerParamsSchema.parse(req.params)
+  	const { id } = registerParamsSchema.parse(req.params);
 
-  	const findUseCase = makeUseCase(FindUseCase, PersonRepository)
+  	const findUseCase = makeUseCase(FindUseCase, PersonRepository);
 
-	const data = await findUseCase.handler(id)
+	const data = await findUseCase.handler(id);
 
-	return res.status(200).json(data)
+	return res.status(200).json(data);
 
 }

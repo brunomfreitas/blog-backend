@@ -12,7 +12,7 @@ export async function findAll(req: Request, res: Response) {
   	})
 
   	const { page, limit } = registerQuerySchema.parse(req.query)
-
+	
   	const findAllUseCase = makeUseCase(FindAllUseCase, PersonRepository)
 
   	const data = await findAllUseCase.handler(page, limit)
