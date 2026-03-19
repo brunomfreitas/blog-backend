@@ -1,0 +1,22 @@
+import { QuestaoRepository } from '@/repositories/typeorm/questao.repository'
+import { makeUseCase } from '@/use-case/factory/make-use-case'
+import { ListUseCase } from '@/use-case/questao/list'
+import { Request, Response } from 'express'
+import { z } from 'zod'
+
+export async function list(req: Request, res: Response) {
+  
+	const registerQuerySchema = z.object({
+    	page: z.coerce.number().default(1),
+    	limit: z.coerce.number().default(10),
+		category: z.coerce.number().optional(),
+  	})
+
+  	const { page, limit, category } = registerQuerySchema.parse(req.query)
+
+  	const listUseCase = makeUseCase(ListUseCase, QuestaoRepository)
+
+  	const data = await listUseCase.handler(page, limit, category )
+
+  	return res.status(200).json(data)
+}
