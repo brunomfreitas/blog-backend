@@ -11,6 +11,7 @@ import { setupSwagger } from './lib/swagger/setup-swagger';
 import { appDataSource } from './lib/typeorm/typeorm';
 
 import cors from "cors";
+import questaoRoutes from './http/controllers/questao/routes';
 
 
 
@@ -42,6 +43,7 @@ export const createApp = async () => {
 	app.use('/user', userRoutes);
 	app.use('/person', personRoutes);
 	app.use('/post-status', postStatusRoutes);
+	app.use('/questao', questaoRoutes);
 	
 
 	return app;
