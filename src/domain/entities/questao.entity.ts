@@ -8,7 +8,7 @@ import {
 	ManyToOne,
 	PrimaryGeneratedColumn,
 	RelationId,
-	UpdateDateColumn,
+	UpdateDateColumn
 } from 'typeorm'
 import { Category } from './category.entity'
 import { Person } from './person.entity'
@@ -25,16 +25,16 @@ export class Questao {
   @Column({ name: 'resposta', type: 'varchar' })
   resposta: string
 
-  @Column({ name: 'escolaridade', type: 'number' })
+  @Column({ name: 'escolaridade', type: 'int' })
   escolaridade: number
 
-  @Column({ name: 'turno', type: 'number' })
+  @Column({ name: 'turno', type: 'int' })
   turno: number
 
-  @Column({ name: 'periodo', type: 'number' })
+  @Column({ name: 'periodo', type: 'int' })
   periodo: number
 
-  @Column({ name: 'tipo_questao', type: 'number' })
+  @Column({ name: 'tipo_questao', type: 'int' })
   tipoQuestao: number
 
   @Column({ name: 'status', type: 'boolean' })

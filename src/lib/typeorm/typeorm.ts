@@ -2,6 +2,7 @@ import { Category } from '@/domain/entities/category.entity';
 import { Person } from '@/domain/entities/person.entity';
 import { PostStatus } from '@/domain/entities/post-status.entity';
 import { Post } from '@/domain/entities/post.entity';
+import { Questao } from '@/domain/entities/questao.entity';
 import { User } from '@/domain/entities/user.entity';
 import { env } from '@/env';
 import 'reflect-metadata';
@@ -19,13 +20,13 @@ export const appDataSource = new DataSource(
         logging: false,
       }
     : {
-         type: 'postgres',
+        type: 'postgres',
 		host: env.DATABASE_HOST,
 		port: env.DATABASE_PORT,
 		username: env.DATABASE_USER,
 		password: env.DATABASE_PASSWORD,
 		database: env.DATABASE_NAME,
-		entities: [Person, User, Post, PostStatus, Category],
+		entities: [Person, User, Post, PostStatus, Category, Questao],
 		logging: env.NODE_ENV === 'development',
       }
 );
