@@ -1,0 +1,6 @@
+export enum ProvaAlunoStatus {
+  PENDENTE = 'PENDENTE',
+  EM_ANDAMENTO = 'EM_ANDAMENTO',
+  FINALIZADA = 'FINALIZADA',
+  EXPIRADA = 'EXPIRADA',
+}

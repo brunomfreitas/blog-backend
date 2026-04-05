@@ -98,9 +98,9 @@ AuthRouter.get('/me', requireAuth, async (req: Request, res: Response) => {
   return res.json({
     id: user.id,
     login: user.login,
-    personId: user.personid,
+    personId: user.personid,	
     person: user.person
-      ? { id: user.person.id, name: user.person.name, email: (user.person as any).email ?? null }
+      ? { id: user.person.id, name: user.person.name, email: (user.person as any).email ?? null, type_person: user.person.type_person }
       : null,
   })
 })

@@ -1,5 +1,5 @@
-export interface ICategory {
-  id?: number
-  questaoId: number
-  name: string  
+export interface IAlternativas {
+  	id?: number
+ 	alternativa: string 
+  	questaoId: number  
 }
