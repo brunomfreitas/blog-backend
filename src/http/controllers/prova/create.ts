@@ -41,6 +41,5 @@ export async function create(req: Request, res: Response) {
 	const data: CreateProvaDTO = registerBodySchema.parse(req.body);	
 	const createUseCase = makeUseCase(CreateUseCase, ProvaRepository);
 	const prova = await createUseCase.handler(data);
-
 	return res.status(201).json(prova);
 }

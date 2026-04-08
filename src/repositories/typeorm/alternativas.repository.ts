@@ -35,10 +35,13 @@ export class AlternativasRepository {
 		})
 	}
 
-	async findById(id: number): Promise<Alternativas | null> {
-		return this.repository.findOne({
-		where: { id },
-		relations: ['alternativaQuestao'],
+	async findById(id: number): Promise<Alternativas[]> {
+		return this.repository.find({
+			where: {
+				alternativaQuestao: { id: id }
+			},
+			relations: ['alternativaQuestao'],
+			order: { id: 'ASC' }
 		})
 	}
 

@@ -72,13 +72,6 @@ O assassinato do arquiduque Francisco Ferdinando, herdeiro do Império Austro-H�
 
 Estudar a Primeira Guerra Mundial permite ao estudante compreender como rivalidades internacionais podem gerar grandes conflitos e refletir sobre a importância do diálogo e da diplomacia para a manutenção da paz.', NULL, '2025-12-22 23:23:24.966', 1, '2025-12-10 20:52:00.000', 1, 4, 7);
 
---INSERT INTO blog.questao (enunciado, resposta, escolaridade, turno, periodo, tipo_questao, category, createdby, status) VALUES
---('Observe o texto a seguir. \nÀ Beça\nGumercindo Bessa (1859-1913), jornalista e jurista alagoano, foi adversário de Rui Barbosa na Questão Acreana, em que o Estado do Amazonas pretendia incorporar o Território do Acre. Bessa venceu a questão em favor do Acre, apresentando argumentos irrefutáveis e numa quantidade impressionante. Posteriormente, mas não muito, Rodrigues Alves (Presidente do Brasil de 1902 a 1906) diria a um cidadão que lhe apresentava um pedido com justificativas infindáveis: O senhor tem argumentos à Bessa. A partir daí, popularizou-se a expressão à beça com o sentido de uma grande quantidade ou intensidade. Por que os dois esses viraram cê-cedilha? Ninguém sabe.\n(Reinaldo Pimenta, A Casa da Mãe Joana 2)\n A ideia central do texto é a de','B',1,1,1,1,1,1,true);
-
-
-
-
-
 
 INSERT INTO blog.questao (enunciado, resposta, escolaridade, turno, periodo, tipo_questao, category, createdby, status) VALUES
 ('Observe o texto a seguir. \nÀ Beça\nGumercindo Bessa (1859-1913), jornalista e jurista alagoano, foi adversário de Rui Barbosa na Questão Acreana, em que o Estado do Amazonas pretendia incorporar o Território do Acre. Bessa venceu a questão em favor do Acre, apresentando argumentos irrefutáveis e numa quantidade impressionante. Posteriormente, mas não muito, Rodrigues Alves (Presidente do Brasil de 1902 a 1906) diria a um cidadão que lhe apresentava um pedido com justificativas infindáveis: O senhor tem argumentos à Bessa. A partir daí, popularizou-se a expressão à beça com o sentido de uma grande quantidade ou intensidade. Por que os dois esses viraram cê-cedilha? Ninguém sabe.\n(Reinaldo Pimenta, A Casa da Mãe Joana 2)\n A ideia central do texto é a de','B',1,1,1,1,1,1,true);
@@ -1523,6 +1516,6 @@ SELECT '(E) voluntário', id FROM q;
 
 commit;
 
-select * from blog.questao;
-select * from blog.prova;
-select * from blog.prova_questao;
+
+-- select * from alternativas;
+--
